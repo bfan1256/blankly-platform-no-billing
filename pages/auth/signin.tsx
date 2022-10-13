@@ -19,7 +19,6 @@
 /*                                                                 */
 /*******************************************************************/
 
-import FacebookButton from "@/components/auth/buttons/FacebookButton";
 import GithubButton from "@/components/auth/buttons/GithubButton";
 import GoogleButton from "@/components/auth/buttons/GoogleButton";
 import SignInForm from "@/components/auth/forms/SignInForm";
@@ -52,10 +51,6 @@ const SignIn = () => {
 
             <div>
               <GoogleButton redirect={redirectUrl} location='Sign In'/>
-            </div>
-
-            <div>
-              <FacebookButton redirect={redirectUrl} location='Sign In'/>
             </div>
           </div>
           <div className="mt-8">

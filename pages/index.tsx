@@ -24,6 +24,7 @@ import type {NextPage} from 'next'
 import styles from '../styles/Home.module.css'
 import {useRouter} from 'next/router';
 import {useEffect} from 'react';
+import { useFormik } from 'formik';
 
 // TODO move this elsewhere
 export const LoadingSpinner = ({text}: { text: string }) => {
@@ -39,18 +40,45 @@ export const LoadingSpinner = ({text}: { text: string }) => {
 }
 
 const Home: NextPage = () => {
+    const password = 'Blankly.iskingduh'
     const {user, loading} = useAuth();
-    const router = useRouter();
-    useEffect(() => {
-        if (!loading) {
+    const formik = useFormik({
+        initialValues: {
+          password: '',
+        },
+        onSubmit: (values) => {
+          if (values.password === password) {
             if (!user) {
-                router.push('/auth/signin');
-            } else {
-                router.push(`/${user.uid}`); // route to user ID project
-            }
-        }
-    })
-    return <LoadingSpinner text={"Loading Blankly Magic..."}/>;
+                            router.push('/auth/signin');
+                        } else {
+                            router.push(`/${user.uid}`); // route to user ID project
+                        }
+          }
+        },
+      });
+    const router = useRouter();
+    return (
+        <div className='h-screen flex-col flex items-center max-w-sm justify-center mx-auto gap-5'>
+            <h1 className="font-bold text-lg">Please Enter Dev Password</h1>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Enter Password"
+              onChange={formik.handleChange}
+              value={formik.values.password}
+              required
+              className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+            />
+            <button
+            onClick={formik.submitForm}
+            type="submit"
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md font-medium shadow-sm text-md text-white bg-gray-900 hover:bg-gray-800"
+            >
+            Validate
+            </button>
+        </div>
+    );
 }
 
 
