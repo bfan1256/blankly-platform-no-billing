@@ -26,10 +26,9 @@ import "firebase/auth";
 import "firebase/analytics";
 import "firebase/storage";
 
-const SQUIRL = true;
 
 // @ts-ignore
-const firebaseConfig = !SQUIRL || process.env.isProd ? {
+const firebaseConfig = {
   apiKey: "AIzaSyDIGVJmkDdkHER_ShveqRMdMDz9OfKG0Ss",
   authDomain: "blankly-6ada5.firebaseapp.com",
   databaseURL: "https://blankly-6ada5.firebaseio.com",
@@ -38,16 +37,7 @@ const firebaseConfig = !SQUIRL || process.env.isProd ? {
   messagingSenderId: "77963558433",
   appId: "1:77963558433:web:0f14077d154b7a8a032d60",
   measurementId: "G-8XYVLL854V"
-} : {
-  apiKey: "AIzaSyBejmYz4-BIzmEMmHJbVWozgnikvc7MoLE",
-  authDomain: "squirl-blankly-slate.firebaseapp.com",
-  databaseURL: "https://squirl-blankly-slate-default-rtdb.firebaseio.com",
-  projectId: "squirl-blankly-slate",
-  storageBucket: "squirl-blankly-slate.appspot.com",
-  messagingSenderId: "69960982812",
-  appId: "1:69960982812:web:e61896c1792d1c95095ad9",
-  measurementId: "G-BQG4PFWMZ1"
-};
+}
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);

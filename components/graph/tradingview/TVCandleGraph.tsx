@@ -48,7 +48,7 @@ const _TVCandleGraph = (props: { data: any, type: GraphType, symbol: string, loa
   const trades = props.data.trades;
   const type = props.type
   const symbol = props.symbol;
-  const exchange = props.data.exchange ? props.data.exchange : "alpaca"
+  const exchange = props.data.exchange ? props.data.exchange : "polygon"
   const loading = props.loading
   const activeIndex = props.activeIndex ? props.activeIndex : 0;
 

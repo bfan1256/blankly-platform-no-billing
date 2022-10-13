@@ -23,7 +23,6 @@ import Image from "next/image";
 import BlanklyWhite from "@/public/blankly-white.svg";
 import Background from "@/public/background.svg";
 import Link from "next/link";
-import FacebookButton from "@/components/auth/buttons/FacebookButton";
 import GithubButton from "@/components/auth/buttons/GithubButton";
 import GoogleButton from "@/components/auth/buttons/GoogleButton";
 import SignUpForm from "@/components/auth/forms/SignUpForm";
@@ -94,10 +93,6 @@ const Register = () => {
 
                   <div>
                     <GoogleButton redirect={redirectUrl} location='Sign Up'/>
-                  </div>
-
-                  <div>
-                    <FacebookButton redirect={redirectUrl} location='Sign Up'/>
                   </div>
                 </div>
                 <div className="mt-8">

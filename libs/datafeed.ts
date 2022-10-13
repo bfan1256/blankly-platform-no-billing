@@ -46,10 +46,10 @@ class Datafeed implements IBasicDataFeed {
   private resolutions: any = ["1", "5", "15", "30", "60", "240", "1D"];
 
   constructor(exchange: string, tickers: string[], cancelToken: any) {
-    this.exchange = exchange;
-    if (this.exchange === 'alpaca') {
-      this.exchange = 'polygon'
+    if (exchange === 'alpaca') {
+      exchange = 'polygon'
     }
+    this.exchange = exchange;
     this.tickers = tickers;
     this.flag = false;
     this.cancelToken = cancelToken;
@@ -119,6 +119,7 @@ class Datafeed implements IBasicDataFeed {
     }
 
     this.instance.post('/', dataReq, {cancelToken: this.cancelToken}).then((response: { data: { result: string; }; }) => {
+      console.log(response.data.result)
       let result = json.parse(response.data.result)
       let data = []
       let points = Object.keys(result['time']).length
