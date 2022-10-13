@@ -40,15 +40,22 @@ class Datafeed implements IBasicDataFeed {
   private tickers: string[];
   private flag: boolean;
   private cancelToken: any;
+  private instance;
 
 
   private resolutions: any = ["1", "5", "15", "30", "60", "240", "1D"];
 
   constructor(exchange: string, tickers: string[], cancelToken: any) {
     this.exchange = exchange;
+    if (this.exchange === 'alpaca') {
+      this.exchange = 'polygon'
+    }
     this.tickers = tickers;
     this.flag = false;
     this.cancelToken = cancelToken;
+    this.instance = axios.create({
+      baseURL: `${process.env.NEXT_PUBLIC_URL_CONNECT_API}`
+    });
   }
 
   onReady(callback: OnReadyCallback): void {
@@ -70,7 +77,7 @@ class Datafeed implements IBasicDataFeed {
         currency_codes: data.currency_codes,
         supports_marks: true,
         supports_time: true,
-        supports_timescale_marks: false,
+        supports_timescale_marks: true,
         symbols_types: data.symbols_types,
       });
     }, 0)
@@ -98,9 +105,7 @@ class Datafeed implements IBasicDataFeed {
 
   getBars(symbolInfo: LibrarySymbolInfo, resolution: ResolutionString, periodParams: PeriodParams, onResult: HistoryCallback, onError: ErrorCallback): void {
     // get bars
-    const instance = axios.create({
-      baseURL: `${process.env.NEXT_PUBLIC_URL_CONNECT_API}`
-    });
+    
     const resValue = this.resolutionToSeconds(resolution);
     let dataReq = {
       exchange: this.exchange,
@@ -113,7 +118,7 @@ class Datafeed implements IBasicDataFeed {
       }
     }
 
-    instance.post('/', dataReq, {cancelToken: this.cancelToken}).then((response: { data: { result: string; }; }) => {
+    this.instance.post('/', dataReq, {cancelToken: this.cancelToken}).then((response: { data: { result: string; }; }) => {
       let result = json.parse(response.data.result)
       let data = []
       let points = Object.keys(result['time']).length
@@ -137,13 +142,15 @@ class Datafeed implements IBasicDataFeed {
           })
         }
       }
-      onResult(data);
+      onResult(data, {
+        noData: data.length === 0
+      });
     })
   }
 
   resolveSymbol(symbolName: string, onResolve: ResolveCallback, onError: ErrorCallback, extension: SymbolResolveExtension | undefined): void {
     const resolutions = this.resolutions;
-    if (this.exchange === "alpaca") {
+    if (this.exchange === "alpaca" || this.exchange === 'polygon') {
       setTimeout(() => {
         onResolve({
           name: symbolName,
@@ -154,9 +161,11 @@ class Datafeed implements IBasicDataFeed {
           session: "0930-1600",
           exchange: this.exchange,
           has_intraday: true,
-          intraday_multipliers: ['1', '15', '30'],
+          has_daily: true,
+          intraday_multipliers: ['1', '15', '30', '60'],
           listed_exchange: this.exchange,
           timezone: "America/New_York",
+          data_status: 'delayed_streaming',
           format: "price",
           pricescale: .2,
           minmov: .01,
