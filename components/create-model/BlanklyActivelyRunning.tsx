@@ -30,7 +30,7 @@ const BlanklyActivelyRunning = ({ projectName, modelName }: { projectName: strin
     const { modelId, projectId } = router.query;
     const [errors, setErrors] = useState<any>([]);
     const verifyVersion = useCallback(() => {
-        getVersionsOnce(projectId as string, modelId as string).then((query) => {
+        getVersionsOnce(projectId as string, modelId as string).then((query: any) => {
             if (query.docs.length > 0) {
                 router.push(`/${projectId}/${modelId}/versions`);
                 updateModel(projectId as string, modelId as string, {

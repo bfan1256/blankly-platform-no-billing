@@ -87,7 +87,7 @@ const SetupForm = () => {
       }
       updateUser(uid, values);
       if (originalEmail !== values.email) {
-        firebase.auth().currentUser?.updateEmail(values.email)
+        //firebase.auth().currentUser?.updateEmail(values.email)
       }
       router.push(`/${uid}`)
     },
